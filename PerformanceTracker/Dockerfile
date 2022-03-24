@@ -1,22 +1,22 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+FROM mcr.microsoft.com/dotnet/sdk:6.0  AS base
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish "PerformanceTrackerAPI.csproj" -c Release -o out
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base2
+
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+ENV ConnectionStrings__DefaultConnection="Data source=/app/performancetracker.db"                                                                                                      
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["PerformanceTracker/PerformanceTracker.csproj", "PerformanceTracker/"]
-RUN dotnet restore "PerformanceTracker/PerformanceTracker.csproj"
-COPY . .
-WORKDIR "/src/PerformanceTracker"
-RUN dotnet build "PerformanceTracker.csproj" -c Release -o /app/build
+copy --from=base /app/out ./app/
+copy --from=base "./app/performancetracker.db" ./
 
-FROM build AS publish
-RUN dotnet publish "PerformanceTracker.csproj" -c Release -o /app/publish
+ENTRYPOINT ["dotnet", "./app/PerformanceTrackerAPI.dll"]
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "PerformanceTracker.dll"]
