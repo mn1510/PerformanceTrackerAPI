@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PerformanceTrackerAPI.Data;
 
@@ -10,26 +11,13 @@ using PerformanceTrackerAPI.Data;
 namespace PerformanceTrackerAPI.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220407142241_UpdatedDataModel4")]
+    partial class UpdatedDataModel4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
-
-            modelBuilder.Entity("PerformanceTrackerAPI.Entities.Activity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ActivityName")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Activity");
-                });
 
             modelBuilder.Entity("PerformanceTrackerAPI.Entities.AppUser", b =>
                 {
@@ -97,27 +85,19 @@ namespace PerformanceTrackerAPI.Data.Migrations
                     b.Property<string>("LogValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParameterAllowedTypeId")
+                    b.Property<int>("ParameterId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ParameterAllowedValueId")
+                    b.Property<int>("ParameterTypeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SubActivityId")
+                    b.Property<int>("SubActivityId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParameterAllowedTypeId");
-
-                    b.HasIndex("ParameterAllowedValueId");
-
-                    b.HasIndex("SubActivityId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ParameterLog");
                 });
@@ -128,15 +108,13 @@ namespace PerformanceTrackerAPI.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ActivityId")
+                    b.Property<int>("ActivityId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SubActivityName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
 
                     b.ToTable("SubActivity");
                 });
@@ -153,59 +131,12 @@ namespace PerformanceTrackerAPI.Data.Migrations
                     b.Property<string>("ParameterName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SubActivityId")
+                    b.Property<int>("SubActivityId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubActivityId");
-
                     b.ToTable("SubActivityParameter");
-                });
-
-            modelBuilder.Entity("PerformanceTrackerAPI.Entities.ParameterLogging", b =>
-                {
-                    b.HasOne("PerformanceTrackerAPI.Entities.ParameterAllowedType", "ParameterAllowedType")
-                        .WithMany()
-                        .HasForeignKey("ParameterAllowedTypeId");
-
-                    b.HasOne("PerformanceTrackerAPI.Entities.ParameterAllowedValue", "ParameterAllowedValue")
-                        .WithMany()
-                        .HasForeignKey("ParameterAllowedValueId");
-
-                    b.HasOne("PerformanceTrackerAPI.Entities.SubActivity", "SubActivity")
-                        .WithMany()
-                        .HasForeignKey("SubActivityId");
-
-                    b.HasOne("PerformanceTrackerAPI.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("ParameterAllowedType");
-
-                    b.Navigation("ParameterAllowedValue");
-
-                    b.Navigation("SubActivity");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PerformanceTrackerAPI.Entities.SubActivity", b =>
-                {
-                    b.HasOne("PerformanceTrackerAPI.Entities.Activity", "Activity")
-                        .WithMany()
-                        .HasForeignKey("ActivityId");
-
-                    b.Navigation("Activity");
-                });
-
-            modelBuilder.Entity("PerformanceTrackerAPI.Entities.SubActivityParameter", b =>
-                {
-                    b.HasOne("PerformanceTrackerAPI.Entities.SubActivity", "SubActivity")
-                        .WithMany()
-                        .HasForeignKey("SubActivityId");
-
-                    b.Navigation("SubActivity");
                 });
 #pragma warning restore 612, 618
         }

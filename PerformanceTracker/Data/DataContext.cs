@@ -10,5 +10,11 @@ namespace PerformanceTrackerAPI.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<ParameterAllowedType> AllowedType { get; set; }
+        public DbSet<ParameterAllowedValue> AllowedValue { get; set; }
+        public DbSet<ParameterLogging> ParameterLog { get; set; }
+        public DbSet<SubActivity> SubActivity { get; set; }
+        public DbSet<SubActivityParameter> SubActivityParameter { get; set; }
+
     }
 }
