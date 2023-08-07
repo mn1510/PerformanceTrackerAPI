@@ -8,7 +8,7 @@ namespace PerformanceTrackerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<string>> GetReport()
         {
-            return null;
+            return "Report generation in progress...";
         }
     }
 }
